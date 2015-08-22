@@ -32,6 +32,12 @@ MainView {
     clip: false
     opacity: 1
 
+    function sendCommand(msg) {
+        label.text = "TX: " + msg
+        socket.sendTextMessage(msg)
+
+    }
+
     Page {
         clip: false
 
@@ -54,7 +60,7 @@ MainView {
             id: socket
             url: "ws://192.168.1.101:9099"
             onTextMessageReceived: {
-                lable.text = "Get a message"
+                label.text = "Get a message"
             }
             onStatusChanged: {
                 if (socket.status == WebSocket.Error) {
@@ -69,13 +75,6 @@ MainView {
             }
             active: true
         }
-
-        function sendCommand(msg) {
-            lable.text = "TX: " + msg
-            socket.sendTextMessage(msg)
-
-        }
-
 
         Image {
             id: base_image
@@ -138,7 +137,7 @@ MainView {
                 onClicked: {
                     console.debug("touch")
                     parent.source = "robot_right.png"
-                    lable.text = "TX: right"
+                    label.text = "TX: right"
                     socket.sendTextMessage("right")
                 }
             }
@@ -152,7 +151,7 @@ MainView {
                 onClicked: {
                     console.debug("touch")
                     parent.source = "robot_left.png"
-                    lable.text = "TX: left"
+                    label.text = "TX: left"
                     socket.sendTextMessage("left")
                 }
             }
