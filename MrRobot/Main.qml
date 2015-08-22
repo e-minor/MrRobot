@@ -94,13 +94,20 @@ MainView {
             }
         }
 
-        Accelerometer {
-            id: accel
-            dataRate: 1000
-            active:true
+//        Accelerometer {
+//            id: accel
+//            dataRate: 1000
+//            active:true
+//            onReadingChanged: {
+//                //console.log('acc- x: ' + accel.reading.x + ', y: ' + accel.reading.y + ', z: ' + accel.reading.z)
+//            }
+//        }
 
-            onReadingChanged: {
-                console.log('acc- x: ' + accel.reading.x + ', y: ' + accel.reading.y + ', z: ' + accel.reading.z)
+        SensorGesture{
+            gestures : ["QtSensors.shake", "QtSensors.pickup", "QtSensors.twist", "QtSensors.slam"]
+            enabled: true
+            onDetected:{
+                console.debug(gesture)
             }
         }
     }
