@@ -6,12 +6,10 @@
     "hooks": {
         "MrRobot": {
             "apparmor": "MrRobot/MrRobot.apparmor",
-            "desktop":  "MrRobot/MrRobot.desktop"
+            "desktop": "MrRobot/MrRobot.desktop"
         }
     },
     "version": "0.1",
     "maintainer": "E Minor Team <xiongyihui3@mail.com>",
-    "framework" : "ubuntu-sdk-15.04"
+    "framework": "ubuntu-sdk-14.10-papi"
 }
-
-

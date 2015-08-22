@@ -1,8 +1,8 @@
 import QtQuick 2.0
 import Ubuntu.Components 1.1
-import MrRobot 1.0
 import QtSensors 5.0
-//import AudioRecorder 1.0
+import QtMultimedia 5.0
+import MrRobot 1.0
 
 /*!
     \brief MainView of MsRobot
@@ -27,18 +27,35 @@ MainView {
     width: units.gu(100)
     height: units.gu(75)
 
+    transformOrigin: Item.Center
+    clip: false
+    opacity: 1
+
     Page {
-        title: i18n.tr("MrRobot")
-/*
+        clip: false
+
         AudioRecorder {
             id: audio
             name: "sample.wav"
 
             onRecordingChanged: {
-                console.log("recording: " + recording);
+                console.debug("recording: " + recording);
             }
         }
-*/
+
+        MediaPlayer {
+            id: player
+            autoPlay: true
+            volume: 1.0
+        }
+
+        Image {
+            width: parent.width
+            height: parent.height
+
+            source: "background.png"
+        }
+
         Column {
             spacing: units.gu(1)
             anchors {
@@ -48,23 +65,24 @@ MainView {
 
             Image {
                 width: parent.width
-                height: parent.width
-
+                anchors.margins: units.gu(8)
+                anchors.topMargin: units.gu(32)
+                fillMode: PreserveAspectFit
                 source: "robot.png"
 
                 MouseArea {
-                    id: robot
                     anchors.fill: parent
                     onClicked: {
-                        console.log("touch")
+                        console.debug("touch")
                         label.text = "touch action"
 
-                        //audio.stop();
-                        //player.source = audio.path();
-                        //player.play();
+                        player.source = audio.path();
+                        player.play();
                     }
                 }
             }
+
+
 
             Label {
                 id: label
@@ -73,43 +91,54 @@ MainView {
                 text: "hello, world"
             }
 
-
-            Row {
+            Item {
+                width: parent.height / 6
+                height: parent.height / 6
                 anchors.bottom: parent.bottom
-                anchors.bottomMargin: units.gu(2)
+                anchors.bottomMargin: units.gu(1)
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.margins: units.gu(2)
 
-                Button {
-                    objectName: "button"
+                Image {
+                    id: voicecontrol
+                    width: parent.height
+                    height: parent.height
+                    //anchors.topMargin: units.gu(2)
+                    fillMode: PreserveAspectFit
+                    source: "voice.png"
 
-                    text: i18n.tr("Voice")
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            if (audio.recording) {
+                                console.debug("stop recording")
+                                label.text = "stop recording"
 
-                    onClicked: {
-                        console.log("voice action")
-                        label.text = "voice action"
-                        //audio.record()
+                                voicecontrol.source = "voice.png"
+                                audio.stop()
+                            } else {
+                                console.debug("recording")
+                                label.text = "recording"
+
+                                voicecontrol.source = "voice_active.png"
+                                audio.record()
+                            }
+                        }
                     }
                 }
+
             }
         }
-
-//        Accelerometer {
-//            id: accel
-//            dataRate: 1000
-//            active:true
-//            onReadingChanged: {
-//                //console.log('acc- x: ' + accel.reading.x + ', y: ' + accel.reading.y + ', z: ' + accel.reading.z)
-//            }
-//        }
 
         SensorGesture{
             gestures : ["QtSensors.shake", "QtSensors.pickup", "QtSensors.twist", "QtSensors.slam"]
             enabled: true
             onDetected:{
                 console.debug(gesture)
+                label.text = 'gesture - ' + gesture
             }
         }
+
     }
 }
 
