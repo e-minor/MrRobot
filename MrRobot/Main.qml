@@ -33,9 +33,13 @@ MainView {
     opacity: 1
 
     function sendCommand(msg) {
-        label.text = "TX: " + msg
-        socket.sendTextMessage(msg)
-
+        console.debug(msg)
+        if (socket.status == WebSocket.Open) {
+            label.text = "TX: " + msg
+            socket.sendTextMessage(msg)
+        } else {
+            socket.active = true
+        }
     }
 
     Page {
@@ -67,6 +71,8 @@ MainView {
                     label.text = "Socket error"
                 } else if (socket.status == WebSocket.Open) {
                     label.text = "Socket opened"
+                    socket.sendTextMessage("blue")
+                    eye_image.source = "eye_blue.png"
                     eye_image.visible = true
                 } else if (socket.status == WebSocket.Closed) {
                     label.text = "Socket closed"
@@ -107,8 +113,6 @@ MainView {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    console.debug("touch")
-
                     sendCommand("robot")
                 }
             }
@@ -121,7 +125,6 @@ MainView {
                 width: parent.width / 2
                 height: parent.height / 2
                 onClicked: {
-                    console.debug("touch")
                     parent.source = "robot.png"
 
                     sendCommand("body")
@@ -135,10 +138,8 @@ MainView {
                 width: parent.width / 5
                 height: parent.height / 2
                 onClicked: {
-                    console.debug("touch")
                     parent.source = "robot_right.png"
-                    label.text = "TX: right"
-                    socket.sendTextMessage("right")
+                    sendCommand("right")
                 }
             }
 
@@ -149,10 +150,8 @@ MainView {
                 width: parent.width / 5
                 height: parent.height / 2
                 onClicked: {
-                    console.debug("touch")
                     parent.source = "robot_left.png"
-                    label.text = "TX: left"
-                    socket.sendTextMessage("left")
+                    sendCommand("left")
                 }
             }
         }
@@ -173,7 +172,6 @@ MainView {
                 width: parent.width / 2
                 height: parent.height / 3
                 onClicked: {
-                    console.debug("touch")
                     var image_name = parent.source.toString()
                     if (image_name.search("eye_blue.png") > 0) {
                         parent.source = "eye_green.png"
@@ -236,8 +234,7 @@ MainView {
             gestures : ["QtSensors.shake", "QtSensors.pickup", "QtSensors.twist", "QtSensors.slam"]
             enabled: true
             onDetected:{
-                console.debug(gesture)
-                label.text = 'gesture - ' + gesture
+                sendCommand(gesture)
             }
         }
 
