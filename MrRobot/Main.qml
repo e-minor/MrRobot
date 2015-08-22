@@ -2,6 +2,7 @@ import QtQuick 2.0
 import Ubuntu.Components 1.1
 import QtSensors 5.0
 import QtMultimedia 5.0
+import Qt.WebSockets 1.0
 import MrRobot 1.0
 
 /*!
@@ -49,6 +50,33 @@ MainView {
             volume: 1.0
         }
 
+        WebSocket {
+            id: socket
+            url: "ws://192.168.1.101:9099"
+            onTextMessageReceived: {
+                lable.text = "Get a message"
+            }
+            onStatusChanged: {
+                if (socket.status == WebSocket.Error) {
+                    label.text = "Socket error"
+                } else if (socket.status == WebSocket.Open) {
+                    label.text = "Socket opened"
+                    eye_image.visible = true
+                } else if (socket.status == WebSocket.Closed) {
+                    label.text = "Socket closed"
+                    eye_image.visible = false
+                }
+            }
+            active: true
+        }
+
+        function sendCommand(msg) {
+            lable.text = "TX: " + msg
+            socket.sendTextMessage(msg)
+
+        }
+
+
         Image {
             id: base_image
             anchors.bottom: parent.bottom
@@ -81,10 +109,8 @@ MainView {
                 anchors.fill: parent
                 onClicked: {
                     console.debug("touch")
-                    label.text = "robot action"
 
-                    player.source = audio.path();
-                    player.play();
+                    sendCommand("robot")
                 }
             }
 
@@ -97,8 +123,9 @@ MainView {
                 height: parent.height / 2
                 onClicked: {
                     console.debug("touch")
-                    label.text = "body action"
                     parent.source = "robot.png"
+
+                    sendCommand("body")
                 }
             }
 
@@ -110,8 +137,9 @@ MainView {
                 height: parent.height / 2
                 onClicked: {
                     console.debug("touch")
-                    label.text = "right hand action"
                     parent.source = "robot_right.png"
+                    lable.text = "TX: right"
+                    socket.sendTextMessage("right")
                 }
             }
 
@@ -123,8 +151,9 @@ MainView {
                 height: parent.height / 2
                 onClicked: {
                     console.debug("touch")
-                    label.text = "left hand action"
                     parent.source = "robot_left.png"
+                    lable.text = "TX: left"
+                    socket.sendTextMessage("left")
                 }
             }
         }
@@ -136,6 +165,7 @@ MainView {
             anchors.margins: units.gu(2)
             width: parent.width
             fillMode: Image.PreserveAspectFit
+            visible: false
             source: "eye_blue.png"
 
             MouseArea {
@@ -146,13 +176,15 @@ MainView {
                 onClicked: {
                     console.debug("touch")
                     var image_name = parent.source.toString()
-                    label.text = image_name.substring(40)
                     if (image_name.search("eye_blue.png") > 0) {
                         parent.source = "eye_green.png"
+                        sendCommand("green")
                     } else if (image_name.search("eye_green.png") > 0) {
                         parent.source = "eye_orange.png"
+                        sendCommand("orange")
                     } else {
                         parent.source = "eye_blue.png"
+                        sendCommand("blue")
                     }
                 }
             }
