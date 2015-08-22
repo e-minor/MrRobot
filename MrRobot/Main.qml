@@ -38,6 +38,8 @@ MainView {
             label.text = "TX: " + msg
             socket.sendTextMessage(msg)
         } else {
+            console.debug("active")
+            socket.active = false
             socket.active = true
         }
     }
