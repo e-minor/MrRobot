@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=MrRobot
+Exec=qmlscene $@ MrRobot/Main.qml
+Icon=MrRobot/MrRobot.png
+Terminal=false
+Type=Application
+X-Ubuntu-Touch=true
+
