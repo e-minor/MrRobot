@@ -8,7 +8,8 @@ QML_FILES += $$files(*.qml,true) \
 
 CONF_FILES +=  MrRobot.apparmor \
                MrRobot.desktop \
-               MrRobot.png
+               MrRobot.png \
+               robot.png
 
 AP_TEST_FILES += tests/autopilot/run \
                  $$files(tests/*.py,true)
