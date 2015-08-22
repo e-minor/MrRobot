@@ -71,8 +71,6 @@ MainView {
         Image {
             id: robot_image
             anchors.top: parent.top
-            anchors.bottom: base_image.top
-            anchors.topMargin: units.gu(4)
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.margins: units.gu(2)
             width: parent.width
@@ -134,7 +132,6 @@ MainView {
         Image {
             id: eye_image
             anchors.top: parent.top
-            anchors.topMargin: units.gu(4)
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.margins: units.gu(2)
             width: parent.width
@@ -193,6 +190,9 @@ MainView {
                         label.text = "recording"
 
                         voice_image.source = "voice_active.png"
+                        player.source = "active.wav";
+                        player.play();
+
                         audio.record()
                     }
                 }
