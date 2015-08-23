@@ -216,12 +216,14 @@ MainView {
 
                         voice_image.source = "voice.png"
                         audio.stop()
+                        player.source = "end.wav";
+                        player.play();
                     } else {
                         console.debug("recording")
                         label.text = "recording"
 
                         voice_image.source = "voice_active.png"
-                        player.source = "active.wav";
+                        player.source = "start.wav";
                         player.play();
 
                         audio.record()
