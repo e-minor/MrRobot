@@ -1,6 +1,6 @@
 TEMPLATE = lib
 TARGET = MrRobotbackend
-QT += qml quick multimedia
+QT += qml quick multimedia core network
 CONFIG += qt plugin
 
 load(ubuntu-click)
@@ -11,12 +11,14 @@ TARGET = $$qtLibraryTarget($$TARGET)
 SOURCES += \
     backend.cpp \
     audiorecorder.cpp \
-    mytype.cpp
+    mytype.cpp \
+    voicerecognition.cpp
 
 HEADERS += \
     backend.h \
     audiorecorder.h \
-    mytype.h
+    mytype.h \
+    voicerecognition.h
 
 OTHER_FILES = qmldir
 

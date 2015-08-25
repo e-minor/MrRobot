@@ -56,6 +56,10 @@ MainView {
             }
         }
 
+        VoiceRecogination {
+            id: ai
+        }
+
         MediaPlayer {
             id: player
             autoPlay: true
@@ -115,6 +119,8 @@ MainView {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
+                    ai.request(audio.name)
+
                     sendCommand("robot")
                 }
             }
@@ -216,15 +222,18 @@ MainView {
 
                         voice_image.source = "voice.png"
                         audio.stop()
-                        player.source = "end.wav";
-                        player.play();
+
+                        ai.request(audio.name);
+
+//                        player.source = "end.wav";
+//                        player.play();
                     } else {
                         console.debug("recording")
                         label.text = "recording"
 
                         voice_image.source = "voice_active.png"
-                        player.source = "start.wav";
-                        player.play();
+//                        player.source = "start.wav";
+//                        player.play();
 
                         audio.record()
                     }

@@ -3,6 +3,7 @@
 #include "backend.h"
 #include "mytype.h"
 #include "audiorecorder.h"
+#include "voicerecognition.h"
 
 
 void BackendPlugin::registerTypes(const char *uri)
@@ -11,6 +12,7 @@ void BackendPlugin::registerTypes(const char *uri)
 
     qmlRegisterType<MyType>(uri, 1, 0, "MyType");
     qmlRegisterType<AudioRecorder>(uri, 1, 0, "AudioRecorder");
+    qmlRegisterType<VoiceRecognition>(uri, 1, 0, "VoiceRecogination");
 }
 
 void BackendPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
